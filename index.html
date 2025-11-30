@@ -238,7 +238,6 @@
         </div>
         
         <div class="pricing-cards">
-            <!-- One-Time Payment Option -->
             <div class="pricing-card featured">
                 <span class="badge">Best Value</span>
                 <div class="plan-name">Pay in Full</div>
@@ -258,7 +257,6 @@
                 </button>
             </div>
             
-            <!-- Installment Payment Option -->
             <div class="pricing-card">
                 <div class="plan-name">Installment Plan</div>
                 <div class="price-container">
@@ -272,57 +270,28 @@
                     <li>Implement a congruent plan for Sphere, Chase, and Attraction strategies to ensure a full pipeline.</li>
                     <li>Weekly "truth-telling" scorecards to track leading indicators (actions) and execution, not just results.</li>
                 </ul>
-                <button class="payment-button" onclick="redirectToCheckout('installment')">
+                 <button class="payment-button" onclick="redirectToCheckout('installment')">
                     Pay $750 / Every Three Months
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- Stripe.js -->
-    <script src="https://js.stripe.com/v3/"></script>
     <script>
-        // Initialize Stripe with your publishable key
-        // REPLACE WITH YOUR ACTUAL PUBLISHABLE KEY
-        const stripe = Stripe('pk_live_51RbsDpEDPdUV2B9Y8wiBB9NRg1sB21TdouAtpkzB4M1v61Aao86ax5GrawnfcdyefsUjZdVuOtaAK3miWCNOnMQb00HoBBUd7B');
-        
         function redirectToCheckout(plan) {
-            // Option 1: If using backend endpoints (recommended)
-            const endpoints = {
-                'one-time': '/create-checkout-session-one-time',
-                'installment': '/create-checkout-session-installment'
-            };
-            
-            fetch(endpoints[plan], {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                return stripe.redirectToCheckout({ sessionId: data.id });
-            })
-            .then(result => {
-                if (result.error) {
-                    alert(result.error.message);
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('An error occurred. Please try again.');
-            });
-            
-            // Option 2: If using Payment Links (no backend needed - EASIEST)
-            // Uncomment the lines below and replace with your actual Payment Link URLs from Stripe
-            /*
+            // Configuration for your specific Stripe Payment Links
             const paymentLinks = {
-                'one-time': 'https://buy.stripe.com/YOUR_ONE_TIME_PAYMENT_LINK',
-                'installment': 'https://buy.stripe.com/YOUR_INSTALLMENT_PAYMENT_LINK'
+                'one-time': 'https://buy.stripe.com/cNi5kDe9wctr6kDfZH48000',
+                'installment': 'https://buy.stripe.com/9B64gz4yW8dbaATdRz48001'
             };
             
-            window.location.href = paymentLinks[plan];
-            */
+            // Check if the plan exists and redirect
+            if (paymentLinks[plan]) {
+                window.location.href = paymentLinks[plan];
+            } else {
+                console.error('Plan link not found:', plan);
+                alert('There was an issue loading the payment page. Please contact support.');
+            }
         }
     </script>
 </body>
